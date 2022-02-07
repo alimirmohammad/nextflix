@@ -3,12 +3,13 @@ import Banner from "../components/banner/banner";
 import Navbar from "../components/nav/navbar";
 import styles from "../styles/Home.module.css";
 import SectionCards from "../components/card/section-cards";
-import getVideos from "../lib/videos";
+import { getVideosByQuery, getPopularVideos } from "../lib/videos";
 
 export default function Home({
   disneyVideos,
   travelVideos,
   productivityVideos,
+  popularVideos,
 }) {
   return (
     <div>
@@ -18,31 +19,38 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar username="ali@test.com" />
-      <Banner
-        title="A Hero"
-        subTitle="an Asghar Farhadi production"
-        imgUrl="/static/a-hero.jpg"
-      />
-      <div className={styles.sectionWrapper}>
-        <SectionCards title="Disney" videos={disneyVideos} size="large" />
-        <SectionCards title="Travel" videos={travelVideos} size="small" />
-        <SectionCards
-          title="Productivity"
-          videos={productivityVideos}
-          size="medium"
+      <div className={styles.main}>
+        <Navbar username="ali@test.com" />
+        <Banner
+          title="A Hero"
+          subTitle="an Asghar Farhadi production"
+          imgUrl="/static/a-hero.jpg"
         />
-        <SectionCards title="Popular" videos={disneyVideos} size="small" />
+        <div className={styles.sectionWrapper}>
+          <SectionCards title="Disney" videos={disneyVideos} size="large" />
+          <SectionCards title="Travel" videos={travelVideos} size="small" />
+          <SectionCards
+            title="Productivity"
+            videos={productivityVideos}
+            size="medium"
+          />
+          <SectionCards title="Popular" videos={popularVideos} size="small" />
+        </div>
       </div>
     </div>
   );
 }
 
 export async function getServerSideProps() {
-  const [disneyVideos, travelVideos, productivityVideos] = await Promise.all([
-    getVideos("disney trailer"),
-    getVideos("travel"),
-    getVideos("productivity"),
-  ]);
-  return { props: { disneyVideos, travelVideos, productivityVideos } };
+  const [disneyVideos, travelVideos, productivityVideos, popularVideos] =
+    await Promise.all([
+      getVideosByQuery("disney trailer"),
+      getVideosByQuery("travel"),
+      getVideosByQuery("productivity"),
+      getPopularVideos(),
+    ]);
+
+  return {
+    props: { disneyVideos, travelVideos, productivityVideos, popularVideos },
+  };
 }
