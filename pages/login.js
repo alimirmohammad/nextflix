@@ -3,19 +3,30 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Login.module.css";
 import { useState } from "react";
+import { magic } from "../lib/magic-link";
+import { useRouter } from "next/router";
 
 export default function Login() {
-  const isLoading = false;
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [userMsg, setUserMsg] = useState("");
+  const router = useRouter();
 
   function handleOnChangeEmail(event) {
     setUserMsg("");
     setEmail(event.target.value);
   }
 
-  function handleLoginWithEmail() {
+  async function handleLoginWithEmail() {
     if (email) {
+      try {
+        setIsLoading(true);
+        const didToken = await magic.auth.loginWithMagicLink({ email });
+        console.log({ didToken });
+        router.push("/");
+      } catch {
+        setIsLoading(false);
+      }
     } else {
       setUserMsg("Please enter your Email");
     }
