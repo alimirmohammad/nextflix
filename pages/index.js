@@ -20,7 +20,7 @@ export default function Home({
       </Head>
 
       <div className={styles.main}>
-        <Navbar username="ali@test.com" />
+        <Navbar />
         <Banner
           title="A Hero"
           subTitle="an Asghar Farhadi production"
