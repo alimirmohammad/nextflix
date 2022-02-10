@@ -22,6 +22,7 @@ export default function Home({
       <div className={styles.main}>
         <Navbar />
         <Banner
+          id="zAJ6_lmr_HQ"
           title="A Hero"
           subTitle="an Asghar Farhadi production"
           imgUrl="/static/a-hero.jpg"
