@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "./navbar.module.css";
-import { magic } from "../../lib/magic-link";
+import { magic } from "../../lib/magic-client";
 
 export default function Navbar() {
   const router = useRouter();

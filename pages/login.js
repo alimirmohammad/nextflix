@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Login.module.css";
 import { useState } from "react";
-import { magic } from "../lib/magic-link";
+import { magic } from "../lib/magic-client";
 import { useRouter } from "next/router";
 
 export default function Login() {
@@ -22,10 +22,14 @@ export default function Login() {
       try {
         setIsLoading(true);
         const didToken = await magic.auth.loginWithMagicLink({ email });
-        console.log({ didToken });
+        await fetch("/api/login", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${didToken}` },
+        });
         router.push("/");
       } catch {
         setIsLoading(false);
+        setUserMsg("There was a problem logging you in.");
       }
     } else {
       setUserMsg("Please enter your Email");

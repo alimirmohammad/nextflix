@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { magic } from "../lib/magic-link";
+import { magic } from "../lib/magic-client";
 import Loading from "../components/loading/loading";
 
 function MyApp({ Component, pageProps }) {
