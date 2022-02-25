@@ -34,6 +34,6 @@ export default async function login(req, res) {
     res.send({ success: true });
   } catch (error) {
     console.error(error);
-    res.send({ message: "Something went wrong logging in!" });
+    res.status(500).send({ message: "Something went wrong logging in!" });
   }
 }

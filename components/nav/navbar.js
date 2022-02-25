@@ -38,8 +38,11 @@ export default function Navbar() {
 
   async function logout() {
     try {
-      await magic.user.logout();
-      router.push("/login");
+      await fetch("/api/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      void router.push("/login");
     } catch (e) {
       console.error(e);
     }

@@ -3,13 +3,19 @@ import Banner from "../components/banner/banner";
 import Navbar from "../components/nav/navbar";
 import styles from "../styles/Home.module.css";
 import SectionCards from "../components/card/section-cards";
-import { getVideosByQuery, getPopularVideos } from "../lib/videos";
+import {
+  getVideosByQuery,
+  getPopularVideos,
+  getWatchItAgainVideos,
+} from "../lib/videos";
+import { getUserIdFromToken } from "../lib/utils";
 
 export default function Home({
   disneyVideos,
   travelVideos,
   productivityVideos,
   popularVideos,
+  watchItAgainVideos,
 }) {
   return (
     <div>
@@ -29,6 +35,11 @@ export default function Home({
         />
         <div className={styles.sectionWrapper}>
           <SectionCards title="Disney" videos={disneyVideos} size="large" />
+          <SectionCards
+            title="Watch it again"
+            videos={watchItAgainVideos}
+            size="small"
+          />
           <SectionCards title="Travel" videos={travelVideos} size="small" />
           <SectionCards
             title="Productivity"
@@ -42,16 +53,40 @@ export default function Home({
   );
 }
 
-export async function getServerSideProps() {
-  const [disneyVideos, travelVideos, productivityVideos, popularVideos] =
-    await Promise.all([
+export async function getServerSideProps({ req }) {
+  try {
+    const token = req.cookies.token;
+    const userId = getUserIdFromToken(token);
+
+    const [
+      disneyVideos,
+      travelVideos,
+      productivityVideos,
+      popularVideos,
+      watchItAgainVideos,
+    ] = await Promise.all([
       getVideosByQuery("disney trailer"),
       getVideosByQuery("travel"),
       getVideosByQuery("productivity"),
       getPopularVideos(),
+      getWatchItAgainVideos(userId, token),
     ]);
 
-  return {
-    props: { disneyVideos, travelVideos, productivityVideos, popularVideos },
-  };
+    return {
+      props: {
+        disneyVideos,
+        travelVideos,
+        productivityVideos,
+        popularVideos,
+        watchItAgainVideos,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
 }
