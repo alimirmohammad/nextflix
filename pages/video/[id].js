@@ -62,7 +62,7 @@ export default function VideoPage({ video }) {
           type="text/html"
           width="100%"
           height="360"
-          src={`http://www.youtube.com/embed/${id}?controls=0&rel=1&origin=http://example.com`}
+          src={`https://www.youtube.com/embed/${id}?controls=0&rel=1&origin=${window.location.origin}`}
           frameBorder="0"
         />
 
